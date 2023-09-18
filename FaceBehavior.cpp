@@ -84,7 +84,7 @@ void FaceBehavior::GoToEmotion(eEmotions emotion) {
 	case eEmotions::Annoyed: _face.Expression.GoTo_Annoyed(); break;
 	case eEmotions::Surprised: _face.Expression.GoTo_Surprised(); break;
 	case eEmotions::Skeptic: _face.Expression.GoTo_Skeptic(); break;
-	case eEmotions::Fustrated: _face.Expression.GoTo_Fustrated(); break;
+	case eEmotions::Frustrated: _face.Expression.GoTo_Frustrated(); break;
 	case eEmotions::Unimpressed: _face.Expression.GoTo_Unimpressed(); break;
 	case eEmotions::Sleepy: _face.Expression.GoTo_Sleepy(); break;
 	case eEmotions::Suspicious: _face.Expression.GoTo_Suspicious(); break;

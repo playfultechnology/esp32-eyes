@@ -30,7 +30,7 @@ enum eEmotions {
 	Annoyed,
 	Surprised,
 	Skeptic,
-	Fustrated,
+	Frustrated,
 	Unimpressed,
 	Sleepy,
 	Suspicious,

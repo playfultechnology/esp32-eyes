@@ -40,7 +40,7 @@ class FaceExpression {
     void GoTo_Annoyed();
     void GoTo_Surprised();
     void GoTo_Skeptic();
-    void GoTo_Fustrated();
+    void GoTo_Frustrated();
     void GoTo_Unimpressed();
     void GoTo_Sleepy();
     void GoTo_Suspicious();

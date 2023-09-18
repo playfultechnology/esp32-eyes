@@ -116,7 +116,7 @@ void FaceExpression::GoTo_Skeptic()
 	_face.LeftEye.TransitionTo(Preset_Skeptic_Alt);
 }
 
-void FaceExpression::GoTo_Fustrated()
+void FaceExpression::GoTo_Frustrated()
 {
 	ClearVariations();
 	_face.RightEye.TransitionTo(Preset_Fustrated);
