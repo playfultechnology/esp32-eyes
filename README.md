@@ -19,18 +19,19 @@ Heavily based on <a href="https://github.com/luisllamasbinaburo/ESP32_Faces/">th
 
 - *Face* is the core object, consisting of left and right eye components, behaviour, expression, a look assistant, and a blink assistant. The outputs of these components are chained together to create the display on each frame:
 
-- The Face *Behaviour* contains an array of weighted _Emotions_. There are currently 18 emotions, as defined in the enum in FaceEmotions.hpp.
+- The Face *Behaviour* contains an array of weighted _Emotions_. There are currently 18 emotions, as defined in the enum in FaceEmotions.hpp. 
 Each emotion can have an individual weight assigned to it, as follows: 
 ```
 face->Behavior.SetEmotion(eEmotions::Glee, 1.0);
 face->Behavior.SetEmotion(eEmotions::Anger, 0.5);
 ```
 If ```face->RandomBehavior = true;``` (which is the default), then Face will use a roulette-wheel selection to randomly assign a new emotion based on their relative weights.
-The frequency with which the current emotion is re-evaluated (although this does not always result in a change) is determined by the value passed to ```face->Behaviour.Timer.SetIntervalMillis();```
-(If no weights have been assigned to any emotion, the face will default to "normal" emotion).
-Note that emotions are not blended together - the "weight" assigned to them determines the chances with which any emotion will be selected to be the next emotion (currentEmotion)
+The frequency with which the current emotion is re-evaluated is determined by the value passed to ```face->Behaviour.Timer.SetIntervalMillis();``` , although note that this does not always result in a change, since the same emotion may be selected as is currently active.
+If no weights have been assigned to any emotion, the face will default to "normal" emotion.
 
-- *Expression* is a wrapper that handles transitions of each eye to the currently selected emotion.
+Note that emotions are _not_ blended together - the face only ever expresses one emotion at a time. The "weight" assigned to each emotion does not specify how they are composited together, but rather it states the relative probability with which any given emotion will be selected.
+
+- *Expression* handles transitions of the eyes to a selected emotion. Each emotion has a preset configuration that defines the eye height, slope, radius, and offset for each emotion (defined in ```EyePresets.h```), and these are assigned by the corresponding ```GoTo_Emotion()``` function.
 
 - The Blink assistant handles blinking. If ```face->RandomBlink = true;``` (the default), the eyes will automatically blink, with a frequency determined by the value passed to ```face->Blink.Timer.SetIntervalMillis();```
 The eyes may be blinked manually by calling ```face->DoBlink();```
