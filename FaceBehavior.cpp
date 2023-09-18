@@ -17,8 +17,7 @@ You should have received a copy of the GNU Affero General Public License along w
 FaceBehavior::FaceBehavior(Face& face) : _face(face), Timer(500) {
 	Timer.Start();
 	Clear();
-	Emotions[(int)eEmotions::Normal] = 2.0;
-	Emotions[(int)eEmotions::Happy] = 1.0;
+	Emotions[(int)eEmotions::Normal] = 1.0;
 }
 
 void FaceBehavior::SetEmotion(eEmotions emotion, float value) {
@@ -45,13 +44,12 @@ eEmotions FaceBehavior::GetRandomEmotion() {
 		return eEmotions::Normal;
 	}
 
-	float rand = random(0, 1000 * eEmotions::EMOTIONS_COUNT) / 1000.0;
+	float rand = random(0, 1000 * sum_of_weight) / 1000.0;
 
 	float acc = 0;
 	for (int emotion = 0; emotion < eEmotions::EMOTIONS_COUNT; emotion++) {
 		if (Emotions[emotion] == 0) continue;
-		acc += Emotions[emotion] * (eEmotions::EMOTIONS_COUNT - 1) / sum_of_weight;
-
+		acc += Emotions[emotion];
 		if (rand <= acc) {
 			return (eEmotions)emotion;
 		}

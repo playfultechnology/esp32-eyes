@@ -27,6 +27,7 @@ void LookAssistant::LookAt(float x, float y)
 	float scaleY_x;
 	float scaleY_y;
 
+  // What is this witchcraft...?!
 	moveX_x = -25 * x;
 	moveY_x = -3 * x;
 	moveY_y = 20 * y;
@@ -51,18 +52,14 @@ void LookAssistant::LookAt(float x, float y)
 	_face.LeftEye.Transformation.Animation.Restart();
 }
 
-void LookAssistant::Update()
-{
+void LookAssistant::Update() {
 	Timer.Update();
 
-	if (Timer.IsExpired())
-	{
+	if (Timer.IsExpired()) {
 		Timer.Reset();
 		auto x = random(-50, 50);
 		auto y = random(-50, 50);
 		LookAt((float)x  / 100, (float)y / 100);
-
 	}
 
 }
-

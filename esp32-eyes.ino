@@ -11,17 +11,15 @@ You should have received a copy of the GNU Affero General Public License along w
 ****************************************************/
 
 // INCLUDES
-#include "Face.h"
+// Built-in Arduino I2C library
 #include <Wire.h>
-#include "Common.h"
+// Defines all face functionality
+#include "Face.h"
 
-// DEFINES
-#define WIDTH  128 //180
-#define HEIGHT 64 //240
-#define EYE 40 //40
+// CONSTANTS
+const byte blinkPin = 16;
 
 // GLOBALS
-U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE, /* clock=*/ 4, /* data= */ 5);
 Face *face;
 String emotionName[] = {
     "Normal",
@@ -45,50 +43,96 @@ String emotionName[] = {
 };
 
 void setup(void) {
+  // Create a serial connection
   Serial.begin(115200);
   Serial.println(__FILE__ __DATE__);
-  face = new Face(WIDTH, HEIGHT, EYE);
 
- // face->Expression.GoTo_Happy();
-  face->Behavior.Clear();
-	face->Behavior.SetEmotion(eEmotions::Glee, 1.0);
+  pinMode(blinkPin, INPUT_PULLUP);
 
-  // Unlike almost every other Arduino application, I2C address scanner etc., u8g2 library
-  // requires 8-bit I2C address, so we shift the 7-bit address left by one.
-  u8g2.setI2CAddress(0x3C<<1);
-  u8g2.begin();
-  u8g2.clearBuffer();					// clear the internal memory
-  u8g2.setFont(u8g2_font_ncenB08_tr);	// choose a suitable font
-  u8g2.drawStr(0,10,"Hello World!");	// write something to the internal memory
-  u8g2.sendBuffer();					// transfer internal memory to the display
+  // Create a new face
+  face = new Face(/* screenWidth = */ 128, /* screenHeight = */ 64, /* eyeSize = */ 40);
+  // Assign the current expression
+  face->Expression.GoTo_Normal();
+
+  // Assign a weight to each emotion that can be chosen
+  face->Behavior.SetEmotion(eEmotions::Normal, 1.0);
+  //face->Behavior.SetEmotion(eEmotions::Angry, 1.0);
+  //face->Behavior.SetEmotion(eEmotions::Sad, 1.0);
+  // Automatically select a random behaviour (based on the weight assigned to each emotion)
+  face->RandomBehavior = true;
+
+  // Automatically blink
+  face->RandomBlink = true;
+  // Set blink rate
+  face->Blink.Timer.SetIntervalMillis(4000);
+  //face->Blink.Timer.Stop();
+
+  // Automatically choose a new random direction to look
+  face->RandomLook = true;
+
+}
+
+float mapFloat(float x, float in_min, float in_max, float out_min, float out_max) {
+  // Check if x is outside the input range
+  if (x <= in_min) return out_min;
+  if (x >= in_max) return out_max;
+
+  // Calculate the proportion of x relative to the input range
+  float proportion = (x - in_min) / (in_max - in_min);
+
+  // Map the proportion to the output range and return the result
+  return (proportion * (out_max - out_min)) + out_min;
 }
 
 void loop(){
+  static int lastMoveTime;
+
+  // To avoid making eyes too twitchy (and to allow time for previous animation to end), we only recalculate new position every 500ms
+  if(millis() - lastMoveTime > 500) {
+    int yRaw = analogRead(25);
+    int xRaw = analogRead(26);
+    float y = mapFloat(yRaw, 0, 4095, 1.0, -1.0);
+    float x = mapFloat(xRaw, 0, 4095, 1.0, -1.0);
+    face->Look.LookAt(x, y);
+    lastMoveTime = millis();
+  }
+  if(!digitalRead(blinkPin)){
+    face->DoBlink();
+  }
+
+
+  /*
+  // Use this code to set a particular emotion from a button
+  int32_t potValue = analogRead(15);
+  float anger = map(potValue, 0, 4095, 0.0, 2.0);
+  face->Behavior.SetEmotion(eEmotions::Angry, anger);
+  */
+
+  /*
+  // Use this code to cycle automatically through all emotions
   static uint32_t counter = millis();
   static uint8_t emotionno = 0;
-  static uint8_t emotionflag = 0;
+  static uint8_t changeEmotionFlag = 0;
   static uint8_t n = 0;
 
   if(millis() - counter > 6000) {
     counter = millis();
     emotionno = n++;
     if(n >= EMOTIONS_COUNT) n = 0;
-      emotionflag = 1;
+      changeEmotionFlag = 1;
     }
   
-  if(emotionflag) {
-    emotionflag = 0;
-    // Update the eyes' emotion
+  if(changeEmotionFlag) {
+    // Clear any previously assigned weights
     face->Behavior.Clear();
+    // Assign weight of 1.0 to the next emotion in the list
     face->Behavior.SetEmotion((eEmotions)emotionno, 1.0);
-
-    // Draw a text string 
-    //u8g2.setCursor((WIDTH-(emotionName[emotionno].length() * 5)) / 2, HEIGHT);
-    //u8g2.print(emotionName[emotionno]);
-    //u8g2.sendBuffer();					// transfer internal memory to the display
+    // Print the new emotion to the serial monitor 
     Serial.println(emotionName[emotionno]);
+    // Reset the flag
+    changeEmotionFlag = 0;
   }
-
+  */
   face->Update();
-  delay(10);
+  //delay(10);
 }

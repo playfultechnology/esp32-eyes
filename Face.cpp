@@ -14,9 +14,20 @@ You should have received a copy of the GNU Affero General Public License along w
 #include "Face.h"
 #include "Common.h"
 
+U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE, /* clock=*/ 4, /* data= */ 5);
+
 Face::Face(uint16_t screenWidth, uint16_t screenHeight, uint16_t eyeSize) 
-	: LeftEye(*this), RightEye(*this), Blink(*this), Look(*this), Behavior(*this), Expression(*this)
-{
+	: LeftEye(*this), RightEye(*this), Blink(*this), Look(*this), Behavior(*this), Expression(*this) {
+
+  // Unlike almost every other Arduino library (and the I2C address scanner script etc.)
+  // u8g2 uses 8-bit I2C address, so we shift the 7-bit address left by one
+  u8g2.setI2CAddress(0x3C<<1);
+  u8g2.begin();
+  u8g2.clearBuffer();					// clear the internal memory
+  u8g2.setFont(u8g2_font_ncenB08_tr);	// choose a suitable font
+  u8g2.drawStr(0,10,"Hello World!");	// write something to the internal memory
+  u8g2.sendBuffer();					// transfer internal memory to the display
+
 	Width = screenWidth;
 	Height = screenHeight;
 	EyeSize = eyeSize;
@@ -26,6 +37,7 @@ Face::Face(uint16_t screenWidth, uint16_t screenHeight, uint16_t eyeSize)
 
 	LeftEye.IsMirrored = true;
 
+  Behavior.Clear();
 	Behavior.Timer.Start();
 }
 
@@ -69,28 +81,16 @@ void Face::Update() {
 }
 
 void Face::Draw() {
-
+  // Clear the display
   u8g2.clearBuffer();
-
-  // Only clear the section of the screen with the eyes - not the text underneath!
-  //u8g2.setDrawColor(0);
-  //u8g2.drawBox(20, 0, 64, 128);
-  //u8g2.setDrawColor(1);
-
+  // Draw left eye
 	LeftEye.CenterX = CenterX - EyeSize / 2 - EyeInterDistance;
 	LeftEye.CenterY = CenterY;
 	LeftEye.Draw();
-
+  // Draw right eye
 	RightEye.CenterX = CenterX + EyeSize / 2 + EyeInterDistance;
 	RightEye.CenterY = CenterY;
 	RightEye.Draw();
-
-  //u8g2.setDisplayRotation(U8G2_R3);
-  //_buffer.setPivot(_buffer.width(), 0);//_buffer.height()/2);
-  //_buffer.pushRotated(270, -1);
-	//_buffer.pushSprite(0, 0);
-
-  u8g2.sendBuffer();					// transfer internal memory to the display
-  //u8g2.setDisplayRotation(U8G2_R0);
-
+  // Transfer the redrawn buffer to the display
+  u8g2.sendBuffer();
 }
