@@ -30,11 +30,11 @@ void setup(void) {
   // Assign the current expression
   face->Expression.GoTo_Normal();
 
-  // Assign a weight to each emotion that can be chosen
+  // Assign a weight to each emotion
   face->Behavior.SetEmotion(eEmotions::Normal, 1.0);
   //face->Behavior.SetEmotion(eEmotions::Angry, 1.0);
   //face->Behavior.SetEmotion(eEmotions::Sad, 1.0);
-  // Automatically switch between possible allowed behaviours (selecting new behaviour randomly based on the weight assigned to each emotion)
+  // Automatically switch between behaviours (selecting new behaviour randomly based on the weight assigned to each emotion)
   face->RandomBehavior = true;
 
   // Automatically blink
