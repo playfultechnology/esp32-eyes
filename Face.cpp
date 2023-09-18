@@ -23,10 +23,7 @@ Face::Face(uint16_t screenWidth, uint16_t screenHeight, uint16_t eyeSize)
   // u8g2 uses 8-bit I2C address, so we shift the 7-bit address left by one
   u8g2.setI2CAddress(0x3C<<1);
   u8g2.begin();
-  u8g2.clearBuffer();					// clear the internal memory
-  u8g2.setFont(u8g2_font_ncenB08_tr);	// choose a suitable font
-  u8g2.drawStr(0,10,"Hello World!");	// write something to the internal memory
-  u8g2.sendBuffer();					// transfer internal memory to the display
+  u8g2.clearBuffer();
 
 	Width = screenWidth;
 	Height = screenHeight;

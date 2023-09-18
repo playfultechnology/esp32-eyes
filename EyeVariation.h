@@ -22,8 +22,7 @@ You should have received a copy of the GNU Affero General Public License along w
 #include "Animations.h"
 #include "EyeConfig.h"
 
-class EyeVariation
-{
+class EyeVariation {
 public:
 	EyeVariation();
 
@@ -41,6 +40,4 @@ public:
 	void Apply(float t);
 };
 
-
 #endif
-
