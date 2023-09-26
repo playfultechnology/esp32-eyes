@@ -119,8 +119,8 @@ void FaceExpression::GoTo_Skeptic()
 void FaceExpression::GoTo_Frustrated()
 {
 	ClearVariations();
-	_face.RightEye.TransitionTo(Preset_Fustrated);
-	_face.LeftEye.TransitionTo(Preset_Fustrated);
+	_face.RightEye.TransitionTo(Preset_Frustrated);
+	_face.LeftEye.TransitionTo(Preset_Frustrated);
 }
 
 void FaceExpression::GoTo_Unimpressed()

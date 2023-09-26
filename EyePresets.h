@@ -205,7 +205,7 @@ static const EyeConfig Preset_Skeptic_Alt = {
 	.Inverse_Offset_Bottom = 0
 };
 
-static const EyeConfig Preset_Fustrated = {
+static const EyeConfig Preset_Frustrated = {
 	.OffsetX = 3,
 	.OffsetY = -5,
 	.Height = 12,

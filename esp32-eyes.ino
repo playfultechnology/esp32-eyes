@@ -11,8 +11,10 @@
 #include "Face.h"
 
 // CONSTANTS
-const byte joystickPins[] = {26, 25};
+const byte joystickPins[] = {25, 26};
 const byte blinkPin = 16;
+const byte moodPins[] = {12, 13, 15};
+const eEmotions moods[] = {eEmotions::Angry, eEmotions::Sad, eEmotions::Surprised}; 
 
 // GLOBALS
 Face *face;
@@ -31,7 +33,7 @@ void setup(void) {
   face->Expression.GoTo_Normal();
 
   // Assign a weight to each emotion
-  face->Behavior.SetEmotion(eEmotions::Normal, 1.0);
+  //face->Behavior.SetEmotion(eEmotions::Normal, 1.0);
   //face->Behavior.SetEmotion(eEmotions::Angry, 1.0);
   //face->Behavior.SetEmotion(eEmotions::Sad, 1.0);
   // Automatically switch between behaviours (selecting new behaviour randomly based on the weight assigned to each emotion)
@@ -67,7 +69,7 @@ void loop(){
     int yRaw = analogRead(25);
     int xRaw = analogRead(26);
     float y = mapFloat(yRaw, 0, 4095, 1.0, -1.0);
-    float x = mapFloat(xRaw, 0, 4095, 1.0, -1.0);
+    float x = mapFloat(xRaw, 0, 4095, -1.0, 1.0);
     face->Look.LookAt(x, y);
     lastMoveTime = millis();
   }
@@ -76,12 +78,12 @@ void loop(){
     face->DoBlink();
   }
 
-  /*
   // Use this code to set a particular emotion from a button
-  int32_t potValue = analogRead(15);
-  float anger = map(potValue, 0, 4095, 0.0, 2.0);
-  face->Behavior.SetEmotion(eEmotions::Angry, anger);
-  */
+  for(int i=0; i<3; i++){
+    int32_t potValue = analogRead(moodPins[i]);
+    float moodLevel = map(potValue, 0, 4095, 0.0, 2.0);
+    face->Behavior.SetEmotion(moods[i], moodLevel);
+  }
 
   // Update the face!
   face->Update();
