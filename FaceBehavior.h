@@ -13,12 +13,7 @@ You should have received a copy of the GNU Affero General Public License along w
 #ifndef _FACEBEHAVIOR_h
 #define _FACEBEHAVIOR_h
 
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
-
+#include <Arduino.h>
 #include "FaceEmotions.hpp"
 #include "AsyncTimer.h"
 

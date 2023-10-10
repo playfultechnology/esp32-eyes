@@ -13,12 +13,7 @@ You should have received a copy of the GNU Affero General Public License along w
 #ifndef _LOOKASSISTANT_h
 #define _LOOKASSISTANT_h
 
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
-
+#include <Arduino.h>
 #include "EyeTransformation.h"
 #include "AsyncTimer.h"
 

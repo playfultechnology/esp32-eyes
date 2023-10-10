@@ -13,13 +13,7 @@ You should have received a copy of the GNU Affero General Public License along w
 #ifndef _FACE_h
 #define _FACE_h
 
-#include "config.h"
-#if defined(ARDUINO) && ARDUINO >= 100
-#include "arduino.h"
-#else
-#include "WProgram.h"
-#endif
-
+#include <Arduino.h>
 #include "Common.h"
 #include "Animations.h"
 #include "EyePresets.h"

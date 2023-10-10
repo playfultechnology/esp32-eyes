@@ -17,12 +17,7 @@ You should have received a copy of the GNU Affero General Public License along w
 #ifndef _EYEPRESETS_h
 #define _EYEPRESETS_h
 
-#if defined(ARDUINO) && ARDUINO >= 100
-#include "arduino.h"
-#else
-#include "WProgram.h"
-#endif
-
+#include <Arduino.h>
 #include "EyeConfig.h"
 
 static const EyeConfig Preset_Normal = {

@@ -13,13 +13,9 @@ You should have received a copy of the GNU Affero General Public License along w
 #ifndef _EYEDRAWER_h
 #define _EYEDRAWER_h
 
+#include <Arduino.h>
 #include "Common.h"
 #include "EyeConfig.h"
-#if defined(ARDUINO) && ARDUINO >= 100
-#include "arduino.h"
-#else
-#include "WProgram.h"
-#endif
 
 enum CornerType {T_R, T_L, B_L, B_R};
 
